@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<!-- служебная часть -->
+
+<head>
+  <!-- заголовок страницы -->
+  
+  <title>Список дел</title>
+  <!-- настраиваем служебную информацию для браузеров -->
+  
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation.min.css">
+
+  <style class="INLINE_PEN_STYLESHEET_ID">
+    .heading {
+		margin: 40px 0 15px;
+		text-transform: uppercase;
+		font-weight: bolder;
+	}
+	#list-items {
+		margin-top: 30px;
+	}
+	#list-items li {
+		font-size: 1.1em;
+		text-transform: capitalize;
+	}
+	#list-items li.done {
+		text-decoration: line-through
+	}
+  </style>
+  
+  <!-- закрываем служебную часть страницы -->
+</head>
+
+<body>
+	
+<body>
+  <h4 class="text-center heading">Список задач к выполнению</h4>
+
+<div class="row">
+  <div class="columns large-8 large-offset-2">
+    
+	<div class="columns medium-9">
+      <input id="todo-input" type="text" />
+    </div>
+    <div class="columns medium-3">
+      <button onclick="addItem()" class="button expanded">Добавить</button>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="columns medium-8 medium-offset-2">
+	<ul id="list-items">
+	</ul>
+  </div>
+</div>
+ 
+
+<script>
+// items array that contains all todo items
+// JSON.parse is used to parse the stringified items from localStorage
+// if localStorage is empty, make the items variable an empty array
+var items = JSON.parse(localStorage.getItem('todo-list')) || [];
+
+// function to add item to the items array
+function addItem() {
+  // get the value of the input box with querySelector
+  var inputBox = document.querySelector('#todo-input');
+  var item = inputBox.value
+  
+  // If input box is empty, return and alert the user
+  // You can also do some more validation if here if you want
+  if (item === "")
+    return alert("Необходимо ввести текст задачи");
+
+  // If input is valid, add item to items array
+  items.push({
+    value: item,
+    time: (new Date()).toLocaleDateString("ru-RU")
+  })
+  
+  // then convert to a string with JSON.stringify and save to localStorage
+  localStorage.setItem('todo-list', JSON.stringify(items));
+  
+  // call function to list all items
+  listItems();
+  
+  // clear input box
+  inputBox.value = "";
+}
+
+// function to remove item from array with Array.splice()
+// removes item, then saves new items array to localStorage
+function deleteItem(index) {
+  items.splice(index, 1);
+  localStorage.setItem('todo-list', JSON.stringify(items))
+  listItems();
+}
+
+function markAsDone(index) {
+  items[index].done = !items[index].done;
+  localStorage.setItem('todo-list', JSON.stringify(items));
+  listItems();
+}
+
+
+// function that generates list of items and populates the html
+function listItems() {
+  var list = "";
+  for (var i = 0; i < items.length; i++) {
+    list += "<li class="+ (items[i].done ? "done" : "") +">";
+    list += items[i].value + " ";
+    list += "<small title='Нажать для отметки выполнения' class='label' onclick='markAsDone("+ i +")'>"+ items[i].time +"</small> ";
+    list += "<span class='label alert' onclick='deleteItem("+ i +")'>Удалить</span></li>";
+    
+  }
+  document.querySelector("#list-items").innerHTML = list;
+}
+
+// function to run when page loads
+(function() {
+  listItems();
+})();
+</script>
+	
+</body>
+<!-- конец всей страницы -->
+
+</html>

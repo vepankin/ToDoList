@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation.min.css">
 
   <style class="INLINE_PEN_STYLESHEET_ID">
-    .heading {
+    	.heading {
 		margin: 40px 0 15px;
 		text-transform: uppercase;
 		font-weight: bolder;
@@ -26,11 +26,14 @@
 	}
 	#list-items li {
 		font-size: 1.1em;
-		text-transform: capitalize;
+		<!--text-transform: capitalize;-->
 	}
 	#list-items li.done {
 		text-decoration: line-through
 	}
+	#list-items li:first-letter {
+      		text-transform: capitalize;
+    	}  
   </style>
   
   <!-- закрываем служебную часть страницы -->
